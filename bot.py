@@ -73,7 +73,7 @@ async def execute_handler(message: types.Message):
 
     output_mse = await run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
                                     content_img, style1_img, style2_img, input_img, mask, mask,
-                                    style2_weight=0, content_weight=2, loss_fn=mse_loss, num_steps=200,
+                                    style2_weight=0, content_weight=7, loss_fn=mse_loss, num_steps=200,
                                     timer=show_progress(message, 200))
 
     output_img = getImage(output_mse)
