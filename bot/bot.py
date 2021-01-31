@@ -6,11 +6,11 @@ from aiogram.utils.executor import start_webhook
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.contrib.fsm_storage.files import JSONStorage
 
-from settings import (BOT_TOKEN, HEROKU_APP_NAME,
+from .settings import (BOT_TOKEN, HEROKU_APP_NAME,
                           WEBHOOK_URL, WEBHOOK_PATH,
                           WEBAPP_HOST, WEBAPP_PORT)
 
-from style_transfer import image_loader, getMask, run_style_transfer, getImage, mse_loss
+from .style_transfer import image_loader, getMask, run_style_transfer, getImage, mse_loss
 
 
 logging.basicConfig(level=logging.INFO)
