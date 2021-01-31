@@ -1,1 +1,1 @@
-web: ado start
+web: python3 do.py
