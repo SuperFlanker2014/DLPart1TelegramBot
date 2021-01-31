@@ -1,4 +1,5 @@
 import logging
+import psutil
 
 from io import BytesIO
 from aiogram import Bot, Dispatcher, types
@@ -36,6 +37,7 @@ async def images_handler(message: types.Message):
 
 @dp.message_handler(commands=['execute'])
 async def execute_handler(message: types.Message):
+    mem()
     v = await dp.storage.get_data(chat=message.chat.id, user=message.from_user.id)
 
     original_file_id = v['original'] if 'original' in v else None
@@ -65,6 +67,8 @@ async def execute_handler(message: types.Message):
 
     await message.answer("Style transfer in process. It takes about 5 minutes...")
 
+    mem()
+
     output_mse = await run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
                                     style2_weight=0, content_weight=7, loss_fn=mse_loss, num_steps=200,
                                     timer=show_progress(message, 200))
@@ -93,6 +97,8 @@ def show_progress(message, steps):
 
 async def on_startup(dp):
     logging.warning('Starting connection.')
+    logging.warning(WEBAPP_PORT)
+    mem()
     await bot.set_webhook(WEBHOOK_URL, allowed_updates=["message"], drop_pending_updates=True)#, certificate=open(WEBHOOK_SSL_CERT, 'rb'))
 
 
@@ -101,6 +107,10 @@ async def on_shutdown(dp):
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.storage.close()
 
+
+def mem():
+    v = dict(psutil.virtual_memory()._asdict())['used']
+    logging.warning(v)
 
 def main():
     logging.basicConfig(level=logging.INFO)
