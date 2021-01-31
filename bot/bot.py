@@ -1,5 +1,5 @@
 import logging
-import os, psutil
+import os, psutil, threading
 
 process = psutil.Process(os.getpid())
 
@@ -70,6 +70,12 @@ async def execute_handler(message: types.Message):
 
     await message.answer("Style transfer in process. It takes about 5 minutes...")
 
+    t = threading.Thread(target=process_nst, args=(message, content_img, style1_img, style2_img, input_img, mask))
+
+    t.start()
+
+
+async def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     mem("run_style_transfer start")
 
     output_mse = await run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,

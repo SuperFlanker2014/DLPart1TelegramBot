@@ -129,7 +129,7 @@ def get_style_model_and_losses(normalization_mean, normalization_std,
 
     memory_notifier("downloading cnn")
 
-    cnn1 = models.vgg13(pretrained=True).features.to(device).eval()
+    cnn1 = models.vgg19(pretrained=True).features.to(device).eval()
 
     memory_notifier("cnn is downloaded")
 
