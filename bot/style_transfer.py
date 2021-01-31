@@ -4,7 +4,7 @@ import torch.optim as optim
 import torchvision.transforms as transforms
 import torchvision.models as models
 from PIL import Image
-import copy
+# import copy
 
 
 imsize = 224
@@ -14,7 +14,6 @@ cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
 content_layers_default = ['conv_4']
 style_layers_default = ['conv_1', 'conv_2', 'conv_3', 'conv_4', 'conv_5']
 style2_layers_default = ['conv_1', 'conv_2', 'conv_3', 'conv_4', 'conv_5']
-cnn = models.vgg19(pretrained=True).features.to(device).eval()
 
 
 loader = transforms.Compose([
@@ -120,13 +119,13 @@ class Normalization(nn.Module):
         return (img - self.mean) / self.std
 
 
-def get_style_model_and_losses(cnn, normalization_mean, normalization_std,
+def get_style_model_and_losses(normalization_mean, normalization_std,
                                style_img, style2_img, content_img, mask1_img, mask2_img,
                                content_layers=content_layers_default,
                                style_layers=style_layers_default,
                                style2_layers=style2_layers_default,
                                loss_fn=mse_loss):
-    cnn1 = copy.deepcopy(cnn)
+    cnn1 = models.vgg19(pretrained=True).features.to(device).eval()
 
     # normalization module
     normalization = Normalization(normalization_mean, normalization_std).to(device)
@@ -206,13 +205,11 @@ async def run_style_transfer(
                        content_weight=1,
                        loss_fn=mse_loss,
                        timer=None,
-                       cnn=cnn,
                        normalization_mean=cnn_normalization_mean,
                        normalization_std=cnn_normalization_std):
     """Run the style transfer."""
     # print('Building the style transfer model..')
-    model, style1_losses, style2_losses, content_losses = get_style_model_and_losses(cnn,
-                                                                                     normalization_mean,
+    model, style1_losses, style2_losses, content_losses = get_style_model_and_losses(normalization_mean,
                                                                                      normalization_std, style1_img,
                                                                                      style2_img, content_img, mask1_img,
                                                                                      mask2_img, loss_fn=loss_fn)
