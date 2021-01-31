@@ -78,7 +78,7 @@ async def execute_handler(message: types.Message):
 def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     mem("run_style_transfer start")
 
-    output_mse = await run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
+    output_mse = run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
                                     style2_weight=0, content_weight=7, loss_fn=mse_loss, num_steps=200,
                                     timer=show_progress(message, 200), memory_notifier=mem)
 
@@ -89,7 +89,7 @@ def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     output_img.save(answer_image, 'JPEG')
     answer_image.seek(0)
 
-    await bot.send_photo(message.chat.id, photo=answer_image)
+    bot.send_photo(message.chat.id, photo=answer_image)
 
 
 @dp.message_handler()
