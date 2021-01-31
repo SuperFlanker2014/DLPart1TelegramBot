@@ -204,7 +204,7 @@ def get_input_optimizer(input_img):
     return optimizer
 
 
-async def run_style_transfer(
+def run_style_transfer(
                        content_img,
                        style1_img, style2_img, input_img,
                        mask1_img, mask2_img,
@@ -253,8 +253,8 @@ async def run_style_transfer(
 
             return style1_score + style2_score + content_score
 
-        if timer:
-            await timer(run[0])
+        # if timer:
+        #     await timer(run[0])
 
         optimizer.step(closure)
 
