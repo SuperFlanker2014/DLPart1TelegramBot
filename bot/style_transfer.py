@@ -125,6 +125,7 @@ def get_style_model_and_losses(normalization_mean, normalization_std,
                                style_layers=style_layers_default,
                                style2_layers=style2_layers_default,
                                loss_fn=mse_loss):
+
     cnn1 = models.vgg19(pretrained=True).features.to(device).eval()
 
     # normalization module
@@ -173,12 +174,12 @@ def get_style_model_and_losses(normalization_mean, normalization_std,
             model.add_module("style_loss_{}".format(i), style_loss)
             style_losses.append(style_loss)
 
-        # добавляю дополнительные слои, чтобы считать функцию потерь для второго стиля
-        if name in style2_layers:
-            target2_feature = model(style2_img).detach()
-            style2_loss = StyleLoss(target2_feature, mask2_img, loss_fn=loss_fn)
-            model.add_module("style2_loss_{}".format(i), style2_loss)
-            style2_losses.append(style2_loss)
+        # # добавляю дополнительные слои, чтобы считать функцию потерь для второго стиля
+        # if name in style2_layers:
+        #     target2_feature = model(style2_img).detach()
+        #     style2_loss = StyleLoss(target2_feature, mask2_img, loss_fn=loss_fn)
+        #     model.add_module("style2_loss_{}".format(i), style2_loss)
+        #     style2_losses.append(style2_loss)
 
     # now we trim off the layers after the last content and style losses
     # выбрасываем все уровни после последенего styel loss или content loss

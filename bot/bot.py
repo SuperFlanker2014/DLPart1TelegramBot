@@ -1,8 +1,7 @@
 import logging
-import ssl
 
 from io import BytesIO
-from aiogram import Bot, Dispatcher, executor, types
+from aiogram import Bot, Dispatcher, types
 from aiogram.utils.executor import start_webhook
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.contrib.fsm_storage.files import JSONStorage
@@ -94,8 +93,6 @@ def show_progress(message, steps):
 
 async def on_startup(dp):
     logging.warning('Starting connection.')
-    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
     await bot.set_webhook(WEBHOOK_URL, allowed_updates=["message"], drop_pending_updates=True)#, certificate=open(WEBHOOK_SSL_CERT, 'rb'))
 
 
