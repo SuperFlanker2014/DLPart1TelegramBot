@@ -124,9 +124,14 @@ def get_style_model_and_losses(normalization_mean, normalization_std,
                                content_layers=content_layers_default,
                                style_layers=style_layers_default,
                                style2_layers=style2_layers_default,
-                               loss_fn=mse_loss):
+                               loss_fn=mse_loss,
+                               memory_notifier=lambda s: print(s)):
+
+    memory_notifier("downloading cnn")
 
     cnn1 = models.vgg19(pretrained=True).features.to(device).eval()
+
+    memory_notifier("cnn is downloaded")
 
     # normalization module
     normalization = Normalization(normalization_mean, normalization_std).to(device)
@@ -140,6 +145,8 @@ def get_style_model_and_losses(normalization_mean, normalization_std,
     # assuming that cnn is a nn.Sequential, so we make a new nn.Sequential
     # to put in modules that are supposed to be activated sequentially
     model = nn.Sequential(normalization)
+
+    memory_notifier("normalization")
 
     i = 0  # increment every time we see a conv
     for layer in cnn1.children():
@@ -206,6 +213,7 @@ async def run_style_transfer(
                        content_weight=1,
                        loss_fn=mse_loss,
                        timer=None,
+                       memory_notifier=lambda s: print(s),
                        normalization_mean=cnn_normalization_mean,
                        normalization_std=cnn_normalization_std):
     """Run the style transfer."""
@@ -213,7 +221,7 @@ async def run_style_transfer(
     model, style1_losses, style2_losses, content_losses = get_style_model_and_losses(normalization_mean,
                                                                                      normalization_std, style1_img,
                                                                                      style2_img, content_img, mask1_img,
-                                                                                     mask2_img, loss_fn=loss_fn)
+                                                                                     mask2_img, loss_fn=loss_fn,memory_notifier=memory_notifier)
     optimizer = get_input_optimizer(input_img)
 
     # print('Optimizing..')

@@ -74,7 +74,7 @@ async def execute_handler(message: types.Message):
 
     output_mse = await run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
                                     style2_weight=0, content_weight=7, loss_fn=mse_loss, num_steps=200,
-                                    timer=show_progress(message, 200))
+                                    timer=show_progress(message, 200), memory_notifier=mem)
 
     output_img = getImage(output_mse)
 
