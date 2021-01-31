@@ -70,12 +70,15 @@ async def execute_handler(message: types.Message):
 
     await message.answer("Style transfer in process. It takes about 5 minutes...")
 
-    t = threading.Thread(target=process_nst, args=(message, content_img, style1_img, style2_img, input_img, mask))
+    t = threading.Thread(
+        target=lambda message, content_img, style1_img, style2_img, input_img, mask:
+        asyncio.run(process_nst(message, content_img, style1_img, style2_img, input_img, mask)),
+        args=(message, content_img, style1_img, style2_img, input_img, mask))
 
     t.start()
 
 
-def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
+async def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     mem("run_style_transfer start")
 
     output_mse = run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
@@ -89,7 +92,7 @@ def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     output_img.save(answer_image, 'JPEG')
     answer_image.seek(0)
 
-    asyncio.run(bot.send_photo(message.chat.id, photo=answer_image))
+    await bot.send_photo(message.chat.id, photo=answer_image)
 
 
 @dp.message_handler()
