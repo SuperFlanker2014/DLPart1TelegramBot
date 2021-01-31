@@ -1,5 +1,5 @@
 import logging
-import os, psutil, threading
+import os, psutil, threading, asyncio
 
 process = psutil.Process(os.getpid())
 
@@ -89,7 +89,7 @@ def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     output_img.save(answer_image, 'JPEG')
     answer_image.seek(0)
 
-    bot.send_photo(message.chat.id, photo=answer_image)
+    asyncio.run(bot.send_photo(message.chat.id, photo=answer_image))
 
 
 @dp.message_handler()
