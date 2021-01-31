@@ -10,13 +10,13 @@ HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME')
 
 
 # webhook settings
-WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
+WEBHOOK_HOST = f'http://{HEROKU_APP_NAME}.herokuapp.com'
 WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
 # webserver settings
 WEBAPP_HOST = '0.0.0.0'
-WEBAPP_PORT = int(os.environ.get('PORT', 443))
+WEBAPP_PORT = int(os.environ.get('PORT', 80))
 
 WEBHOOK_SSL_CERT = 'webhook.cer'  # Путь к сертификату
 WEBHOOK_SSL_PRIV = 'webhook.cer'  # Путь к приватному ключу
