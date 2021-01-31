@@ -1,4 +1,5 @@
 import logging
+import ssl
 
 from io import BytesIO
 from aiogram import Bot, Dispatcher, executor, types
@@ -8,7 +9,8 @@ from aiogram.contrib.fsm_storage.files import JSONStorage
 
 from .settings import (BOT_TOKEN, HEROKU_APP_NAME,
                           WEBHOOK_URL, WEBHOOK_PATH,
-                          WEBAPP_HOST, WEBAPP_PORT)
+                          WEBAPP_HOST, WEBAPP_PORT,
+                       WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
 from .style_transfer import image_loader, getMask, run_style_transfer, getImage, mse_loss
 
@@ -92,11 +94,15 @@ def show_progress(message, steps):
 
 async def on_startup(dp):
     logging.warning('Starting connection.')
-    await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+    await bot.set_webhook(WEBHOOK_URL, allowed_updates=["message"], drop_pending_updates=True, certificate=open(WEBHOOK_SSL_CERT, 'rb'))
 
 
 async def on_shutdown(dp):
     logging.warning('Bye! Shutting down webhook connection')
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.storage.close()
 
 
 def main():
