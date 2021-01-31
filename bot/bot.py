@@ -92,7 +92,9 @@ async def process_nst(message, content_img, style1_img, style2_img, input_img, m
     output_img.save(answer_image, 'JPEG')
     answer_image.seek(0)
 
-    await bot.send_photo(message.chat.id, photo=answer_image)
+    bot1 = Bot(token=BOT_TOKEN)
+
+    await bot1.send_photo(message.chat.id, photo=answer_image)
 
 
 @dp.message_handler()
