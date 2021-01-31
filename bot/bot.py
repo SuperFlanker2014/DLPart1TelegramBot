@@ -75,7 +75,7 @@ async def execute_handler(message: types.Message):
     t.start()
 
 
-async def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
+def process_nst(message, content_img, style1_img, style2_img, input_img, mask):
     mem("run_style_transfer start")
 
     output_mse = await run_style_transfer(content_img, style1_img, style2_img, input_img, mask, mask,
