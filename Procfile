@@ -1,1 +1,1 @@
-web: python3 do.py
+web: python3 old_bot.py
