@@ -68,7 +68,7 @@ async def execute_handler(message: types.Message):
 
     input_img = content_img.clone()
 
-    await message.answer("Style transfer in process. It takes about 5 minutes...")
+    await message.answer("Style transfer in process. It takes about 10 minutes on heroku...")
 
     t = threading.Thread(
         target=lambda message, content_img, style1_img, style2_img, input_img, mask:
@@ -95,6 +95,8 @@ async def process_nst(message, content_img, style1_img, style2_img, input_img, m
     bot1 = Bot(token=BOT_TOKEN)
 
     await bot1.send_photo(message.chat.id, photo=answer_image)
+
+    await bot1.close_bot()
 
 
 @dp.message_handler()
