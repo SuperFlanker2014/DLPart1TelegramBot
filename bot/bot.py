@@ -25,7 +25,7 @@ dp.middleware.setup(LoggingMiddleware())
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    await message.reply("Hi!\nI'm Style bot!\nSend me an image with caption 'original' and an image with caption 'style'.\nThen send command /execute.")
+    await message.reply("Hi!\nI'm Style bot!\nSend me an image with caption 'original' and an image with caption 'style'.\nThen send command /execute.\n@superflanker")
 
 
 @dp.message_handler(content_types=[types.message.ContentType.PHOTO, types.message.ContentType.DOCUMENT])
